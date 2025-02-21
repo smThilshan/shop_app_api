@@ -1,5 +1,6 @@
 const e = require('express');
 const Product = require('../models/product');
+const Cart = require('../models/cart');
 
 exports.getProducts = (req, res, next) => {
   Product.fetchAll(products => {
@@ -47,6 +48,30 @@ exports.getCart = (req, res, next) => {
     pageTitle: 'Your Cart',
   });
 };
+
+// exports.postCart = (req, res, next) => {
+//   const prodId = req.body.productId;
+//   Product.findById(prodId, product => {
+//     Cart.addProduct(prodId, product.price);
+//   });
+//   res.redirect('/cart');
+// };
+
+exports.postCart = (req, res, next) => {
+  console.log("✅ postCart function called!");
+  const prodId = req.body.productId;
+  console.log("Received Product ID:", prodId);
+  Product.findById(prodId, product => {
+      if (!product) {
+          console.error("❌ Product not found:", prodId);
+          return res.redirect('/products');
+      }
+      Cart.addProduct(prodId, product.price);
+      console.log("✅ Product added to cart successfully!");
+      res.redirect('/cart');
+  });
+};
+
 
 exports.getOrders = (req, res, next) => {
   res.render('shop/orders', {

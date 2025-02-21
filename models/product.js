@@ -41,7 +41,7 @@ module.exports = class Product {
 
   static findById(id, callback) {
     getProductsFromFile(products => {
-      console.log("Products:", products);
+      // console.log("Products:", products);
       const product = products.find(p => p.id.trim() === id.trim());
       // console.log("Searched Product:", product); // This will confirm the match
       callback(product);
